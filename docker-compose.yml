@@ -4,8 +4,11 @@ services:
   cert-manager:
     build: .
     environment:
-      - DIGITAL_OCEAN_TOKEN=${DIGITAL_OCEAN_TOKEN}
+      - DIGITALOCEAN_TOKEN=${DIGITALOCEAN_TOKEN}
       - DOMAIN_NAME=${DOMAIN_NAME}
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
+      - CLOUDFLARE_API_KEY=${CLOUDFLARE_API_KEY}
+      - CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}
     image: cert-manager
     container_name: cert-manager
     logging:
@@ -14,3 +17,5 @@ services:
         max-size: "10m"
         max-file: "50"
     restart: always
+    volumes:
+      - ./letsencrypt:/etc/letsencrypt
