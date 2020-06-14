@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  cert-manager:
+    build: .
+    environment:
+      - DIGITAL_OCEAN_TOKEN=${DIGITAL_OCEAN_TOKEN}
+      - DOMAIN_NAME=${DOMAIN_NAME}
+    image: cert-manager
+    container_name: cert-manager
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "50"
+    restart: always
