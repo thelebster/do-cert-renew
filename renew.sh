@@ -1,9 +1,7 @@
 #!/bin/bash
 
 # Stops the script, if an error occurred.
-set -evx
-
-printenv
+set -e
 
 DIGITALOCEAN_TOKEN=$DIGITALOCEAN_TOKEN
 DOMAIN_NAME=$DOMAIN_NAME

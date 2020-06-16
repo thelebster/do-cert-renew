@@ -3,8 +3,6 @@
 # Stops the script, if an error occurred.
 set -e
 
-printenv
-
 touch /etc/cron.d/crontab \
     && echo DIGITALOCEAN_TOKEN=$DIGITALOCEAN_TOKEN >> /etc/cron.d/crontab \
     && echo DOMAIN_NAME=$DOMAIN_NAME >> /etc/cron.d/crontab \

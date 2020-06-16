@@ -2,8 +2,6 @@
 
 set -e
 
-printenv
-
 # Get your API key from https://www.cloudflare.com/a/account/my-account
 API_KEY=$CLOUDFLARE_API_KEY
 EMAIL=$CLOUDFLARE_EMAIL
