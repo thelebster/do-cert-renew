@@ -4,7 +4,7 @@ MAINTAINER Anton Lebedev <mailbox@lebster.me>
 
 # Install cron.
 RUN apt-get update \
-    && apt-get -y install cron curl python3.7 jq
+    && apt-get -y install cron curl jq
 
 # Install certbot.
 RUN apt-get install -y software-properties-common \
