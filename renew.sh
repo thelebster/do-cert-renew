@@ -7,11 +7,6 @@ DIGITALOCEAN_TOKEN=$DIGITALOCEAN_TOKEN
 DOMAIN_NAME=$DOMAIN_NAME
 LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL
 
-CERTIFICATES=$(curl -X GET "https://api.digitalocean.com/v2/certificates" \
-	-H "Authorization: Bearer $DIGITALOCEAN_TOKEN")
-
-CERTIFICATE_ID=$(echo $CERTIFICATES | jq -r '.certificates[] | select(.name == "'"$DOMAIN_NAME"'") | .id')
-
 certbot certonly \
   --manual \
   -n \
@@ -26,9 +21,16 @@ certbot certonly \
 
 if ! grep -q "Cert not yet due for renewal" /tmp/certbot.status; then
 
-  curl -X DELETE "https://api.digitalocean.com/v2/certificates/$CERTIFICATE_ID" \
-    -H "Content-Type: application/json" \
-    -H "Authorization: Bearer $DIGITALOCEAN_TOKEN"
+  CERTIFICATES=$(curl -X GET "https://api.digitalocean.com/v2/certificates" \
+    -H "Authorization: Bearer $DIGITALOCEAN_TOKEN")
+
+  CERTIFICATE_ID=$(echo $CERTIFICATES | jq -r '.certificates[] | select(.name == "'"$DOMAIN_NAME"'") | .id')
+
+  if [ -n "${CERTIFICATE_ID}" ]; then
+    curl -X DELETE "https://api.digitalocean.com/v2/certificates/$CERTIFICATE_ID" \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $DIGITALOCEAN_TOKEN"
+  fi
 
   PRIVATE_KEY=$(jq -aRs . < /etc/letsencrypt/live/$DOMAIN_NAME/privkey.pem)
   LEAF_CERT=$(jq -aRs . < /etc/letsencrypt/live/$DOMAIN_NAME/cert.pem)

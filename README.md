@@ -6,6 +6,11 @@ Get your API key from https://www.cloudflare.com/a/account/my-account.
 docker-compose -f docker-compose.yml up --build -d
 ```
 
+Run script directly:
+```
+export $(cat .env) && bash renew.sh
+```
+
 * https://certbot.eff.org/docs/using.html#hooks
 * https://www.digitalocean.com/docs/accounts/security/certificates/
 * https://www.digitalocean.com/docs/spaces/how-to/customize-cdn-endpoint/
