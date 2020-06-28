@@ -12,6 +12,8 @@ RUN apt-get install -y software-properties-common \
     && apt update \
     && apt -y install certbot
 
+RUN apt-get install -y uuid-runtime
+
 COPY crontab /tmp/crontab
 COPY entrypoint.sh /
 COPY renew.sh /

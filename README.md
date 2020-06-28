@@ -13,9 +13,20 @@ Run script manually:
 docker exec -it cert-manager ./renew.sh
 ```
 
-Run script directly:
+Run renewal script directly:
 ```
 export $(cat .env) && bash renew.sh
+```
+or
+```
+export $(cat .env) && docker run --rm -it \
+    -e DIGITALOCEAN_TOKEN=$DIGITALOCEAN_TOKEN \
+    -e DIGITALOCEAN_CDN_ORIGIN=$DIGITALOCEAN_CDN_ORIGIN \
+    -e DOMAIN_NAME=$DOMAIN_NAME \
+    -e LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL \
+    -e CLOUDFLARE_API_KEY=$CLOUDFLARE_API_KEY \
+    -e CLOUDFLARE_EMAIL=$CLOUDFLARE_EMAIL \
+    cert-manager ./renew.sh
 ```
 
 * https://certbot.eff.org/docs/using.html#hooks

@@ -5,6 +5,7 @@ set -e
 
 touch /etc/cron.d/crontab \
     && echo DIGITALOCEAN_TOKEN=$DIGITALOCEAN_TOKEN >> /etc/cron.d/crontab \
+    && echo DIGITALOCEAN_CDN_ORIGIN=$DIGITALOCEAN_CDN_ORIGIN >> /etc/cron.d/crontab \
     && echo DOMAIN_NAME=$DOMAIN_NAME >> /etc/cron.d/crontab \
     && echo LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL >> /etc/cron.d/crontab \
     && echo CLOUDFLARE_API_KEY=$CLOUDFLARE_API_KEY >> /etc/cron.d/crontab \
