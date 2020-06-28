@@ -7,6 +7,7 @@ DIGITALOCEAN_TOKEN=$DIGITALOCEAN_TOKEN
 DIGITALOCEAN_CDN_ORIGIN=$DIGITALOCEAN_CDN_ORIGIN
 DOMAIN_NAME=$DOMAIN_NAME
 LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL
+UUID_REGEXP='[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}'
 
 certbot certonly \
   --manual \
@@ -57,6 +58,20 @@ EOF
           -d '{"certificate_id": "'"$CERTIFICATE_ID"'", "custom_domain": "'"$DOMAIN_NAME"'"}')
 
         echo $RESPONSE
+
+        echo "Removing old certificates..."
+        CERTIFICATES=$(curl -X GET "https://api.digitalocean.com/v2/certificates" \
+          -H "Authorization: Bearer $DIGITALOCEAN_TOKEN")
+
+        if [ -n "${CERTIFICATES}" ]; then
+          CERTIFICATES=$(echo $CERTIFICATES | jq -r '.certificates[] | select(.name | test("'"$UUID_REGEXP.$DOMAIN_NAME"'")) | select(.id != "'"$CERTIFICATE_ID"'") | .id')
+          for CERT_ID in $CERTIFICATES
+          do
+            curl -X DELETE "https://api.digitalocean.com/v2/certificates/$CERT_ID" \
+              -H "Content-Type: application/json" \
+              -H "Authorization: Bearer $DIGITALOCEAN_TOKEN"
+          done
+        fi
       else
         echo "Creating new CDN endpoint..."
         RESPONSE=$(curl -X POST "https://api.digitalocean.com/v2/cdn/endpoints" \
