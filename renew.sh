@@ -8,6 +8,10 @@ DIGITALOCEAN_CDN_ORIGIN=$DIGITALOCEAN_CDN_ORIGIN
 DOMAIN_NAME=$DOMAIN_NAME
 LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL
 UUID_REGEXP='[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}'
+CERTBOT_STATUS_OUTPUT=/tmp/certbot.status
+
+# Clean the certbot status output before run again.
+rm -f $CERTBOT_STATUS_OUTPUT
 
 certbot certonly \
   --manual \
@@ -19,14 +23,20 @@ certbot certonly \
   --manual-public-ip-logging-ok \
   -d $DOMAIN_NAME \
   -m $LETSENCRYPT_EMAIL \
-  |& tee /tmp/certbot.status
+  |& tee $CERTBOT_STATUS_OUTPUT
 
-if grep -qi "An unexpected error occurred" /tmp/certbot.status; then
+# Check if certbot response is not empty.
+if [ ! -f $CERTBOT_STATUS_OUTPUT ] || [ ! -s $CERTBOT_STATUS_OUTPUT ]; then
+  echo "Certbot response is empty"
+  exit 1
+fi
+
+if grep -qi "An unexpected error occurred" $CERTBOT_STATUS_OUTPUT; then
   echo "An unexpected error occurred"
   exit 1
 fi
 
-if grep -qi "Cert not yet due for renewal" /tmp/certbot.status; then
+if grep -qi "Cert not yet due for renewal" $CERTBOT_STATUS_OUTPUT; then
   echo "Cert not yet due for renewal"
   exit 0
 fi
