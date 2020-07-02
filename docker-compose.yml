@@ -10,6 +10,7 @@ services:
       - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
       - CLOUDFLARE_API_KEY=${CLOUDFLARE_API_KEY}
       - CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}
+      - CERTBOT_ARGS=${CERTBOT_ARGS}
     image: cert-manager
     container_name: cert-manager
     logging:

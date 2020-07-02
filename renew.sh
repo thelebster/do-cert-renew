@@ -9,6 +9,7 @@ DOMAIN_NAME=$DOMAIN_NAME
 LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL
 UUID_REGEXP='[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}'
 CERTBOT_STATUS_OUTPUT=/tmp/certbot.status
+CERTBOT_ARGS=$CERTBOT_ARGS
 
 # Clean the certbot status output before run again.
 rm -f $CERTBOT_STATUS_OUTPUT
@@ -23,6 +24,7 @@ certbot certonly \
   --manual-public-ip-logging-ok \
   -d $DOMAIN_NAME \
   -m $LETSENCRYPT_EMAIL \
+  ${CERTBOT_ARGS} \
   |& tee $CERTBOT_STATUS_OUTPUT
 
 # Check if certbot response is not empty.
