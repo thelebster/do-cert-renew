@@ -7,10 +7,12 @@ RUN apt-get update \
     && apt-get -y install cron curl jq
 
 # Install certbot.
-RUN apt-get install -y software-properties-common \
+RUN apt-get update \
+    && apt-get install -y software-properties-common \
+    && add-apt-repository -y universe \
     && add-apt-repository -y ppa:certbot/certbot \
-    && apt update \
-    && apt -y install certbot
+    && apt-get update \
+    && apt-get -y install certbot
 
 RUN apt-get install -y uuid-runtime
 
