@@ -34,12 +34,10 @@ if [ ! -f $CERTBOT_STATUS_OUTPUT ] || [ ! -s $CERTBOT_STATUS_OUTPUT ]; then
 fi
 
 if grep -qi "An unexpected error occurred" $CERTBOT_STATUS_OUTPUT; then
-  echo "An unexpected error occurred"
   exit 1
 fi
 
 if grep -qi "Cert not yet due for renewal" $CERTBOT_STATUS_OUTPUT; then
-  echo "Cert not yet due for renewal"
   exit 0
 fi
 
