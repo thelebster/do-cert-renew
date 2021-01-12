@@ -8,7 +8,7 @@ DIGITALOCEAN_CDN_ORIGIN=$DIGITALOCEAN_CDN_ORIGIN
 DOMAIN_NAME=$DOMAIN_NAME
 LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL
 UUID_REGEXP='[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}'
-CERTBOT_STATUS_OUTPUT=/tmp/certbot.status
+CERTBOT_STATUS_OUTPUT="/tmp/certbot/certbot.${DOMAIN_NAME}.status"
 CERTBOT_ARGS=$CERTBOT_ARGS
 
 # Clean the certbot status output before run again.
@@ -25,7 +25,8 @@ certbot certonly \
   -d $DOMAIN_NAME \
   -m $LETSENCRYPT_EMAIL \
   ${CERTBOT_ARGS} \
-  |& tee $CERTBOT_STATUS_OUTPUT
+  # Use 2>&1 instead of |&
+  2>&1 | tee $CERTBOT_STATUS_OUTPUT
 
 # Check if certbot response is not empty.
 if [ ! -f $CERTBOT_STATUS_OUTPUT ] || [ ! -s $CERTBOT_STATUS_OUTPUT ]; then
