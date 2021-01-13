@@ -1,8 +1,14 @@
-Runs the challenges and pushes the new certificate to DigitalOcean [certificates](https://www.digitalocean.com/docs/accounts/security/certificates/) for Load Balancers and Spaces. Built on top of CloudFlare API, LetsEncrypt and DigitalOcean API.
+# DigitalOcean Spaces certificate renewal manager
+
+Runs the challenges and pushes the new certificate to DigitalOcean [certificates](https://www.digitalocean.com/docs/accounts/security/certificates/) for Spaces. Built on top of CloudFlare API, LetsEncrypt and DigitalOcean API.
 
 ![alt text][screenshot]
 
-Get your API key from https://www.cloudflare.com/a/account/my-account.
+**To make custom subdomain work, you need to [create a CNAME record](https://www.digitalocean.com/docs/networking/dns/how-to/manage-records/#cname-records) pointing to your Space.**
+
+Current implementation use CloudFlare API to manage DNS for a custom domain, you need to [get your API key](https://www.cloudflare.com/a/account/my-account).
+
+## Usage 
 
 Pull the latest version from https://hub.docker.com/r/thelebster/do-cert-renew:
 ```
@@ -81,6 +87,7 @@ export $(cat .env) && docker run --rm -it \
 * https://www.digitalocean.com/docs/spaces/how-to/customize-cdn-endpoint/
 * https://www.digitalocean.com/docs/apis-clis/api/
 * https://developers.digitalocean.com/documentation/v2/#certificates
+* https://developers.digitalocean.com/documentation/v2/#cdn-endpoints
 
 ## Changelog
 

@@ -85,6 +85,7 @@ if [ -n "${CERTIFICATE}" ]; then
         -H "Authorization: Bearer $DIGITALOCEAN_TOKEN")
 
       if [ -n "${CERTIFICATES}" ]; then
+        # Remove legacy certificates, except the new one.
         CERTIFICATES=$(echo $CERTIFICATES | jq -r '.certificates[] | select(.name | test("'"$UUID_REGEXP.$DOMAIN_NAME"'")) | select(.id != "'"$CERTIFICATE_ID"'") | .id')
         for CERT_ID in $CERTIFICATES
         do
