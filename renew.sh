@@ -46,8 +46,9 @@ PRIVATE_KEY=$(jq -aRs . < /etc/letsencrypt/live/$DOMAIN_NAME/privkey.pem)
 LEAF_CERT=$(jq -aRs . < /etc/letsencrypt/live/$DOMAIN_NAME/cert.pem)
 CERT_CHAIN=$(jq -aRs . < /etc/letsencrypt/live/$DOMAIN_NAME/fullchain.pem)
 CERT_NAME="$(uuidgen).$DOMAIN_NAME"
+CERT_REQUEST_DATA_FILE_NAME=/tmp/certbot/$DOMAIN_NAME.cert.json
 
-cat << EOF > /tmp/cert.json
+cat << EOF > $CERT_REQUEST_DATA_FILE_NAME
 {
   "name": "$CERT_NAME",
   "type": "custom",
@@ -60,7 +61,7 @@ EOF
 CERTIFICATE=$(curl -X POST "https://api.digitalocean.com/v2/certificates" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $DIGITALOCEAN_TOKEN" \
-  -d @/tmp/cert.json)
+  -d @$CERT_REQUEST_DATA_FILE_NAME)
 
 if [ -n "${CERTIFICATE}" ]; then
   CERTIFICATE_ID=$(echo $CERTIFICATE | jq -r '.certificate | .id')
