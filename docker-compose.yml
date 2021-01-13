@@ -11,6 +11,7 @@ services:
       - CLOUDFLARE_API_KEY=${CLOUDFLARE_API_KEY}
       - CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}
       - CERTBOT_ARGS=${CERTBOT_ARGS}
+      - SPACES=${SPACES}
     image: cert-manager
     container_name: cert-manager
     logging:
@@ -21,6 +22,7 @@ services:
     restart: always
     volumes:
       - ./letsencrypt:/etc/letsencrypt
+      - ./tmp:/tmp/certbot
 
 networks:
   default:
