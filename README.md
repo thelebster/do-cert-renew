@@ -97,6 +97,9 @@ export $(cat .env) && docker run --rm -it \
 
 ## Changelog
 
+**Jan 13, 2021**
+* Allow renewal for multiple Spaces (CDN endpoints).
+
 **July 2, 2020**
 * Allow pass extra arguments, like `-vvv`, `--dry-run`, `--force-renewal` etc. to certbot using `CERTBOT_ARGS` env variable.
 
