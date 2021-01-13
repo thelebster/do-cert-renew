@@ -11,6 +11,7 @@ touch rm -f /etc/cron.d/crontab \
     && echo LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL >> /etc/cron.d/crontab \
     && echo CLOUDFLARE_API_KEY=$CLOUDFLARE_API_KEY >> /etc/cron.d/crontab \
     && echo CLOUDFLARE_EMAIL=$CLOUDFLARE_EMAIL >> /etc/cron.d/crontab \
+    && if [ -n "${SPACES}" ]; then echo SPACES=$SPACES >> /etc/cron.d/crontab; fi \
     && if [ -n "${CERTBOT_ARGS}" ]; then echo CERTBOT_ARGS=$CERTBOT_ARGS >> /etc/cron.d/crontab; fi \
     && cat /tmp/crontab >> /etc/cron.d/crontab \
     && cat /etc/cron.d/crontab

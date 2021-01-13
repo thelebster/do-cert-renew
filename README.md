@@ -15,6 +15,12 @@ Pull the latest version from https://hub.docker.com/r/thelebster/do-cert-renew:
 docker pull thelebster/do-cert-renew
 ```
 
+To run renewal for multiple CDN endpoints and domains, provide colon-separated pairs within `SPACES` env variable, in form of `DIGITALOCEAN_CDN_ORIGIN,CUSTOM_DOMAIN_NAME;DIGITALOCEAN_CDN_ORIGIN,CUSTOM_DOMAIN_NAME;...`.
+
+```
+SPACES=example.ams3.digitaloceanspaces.com,cdn.example.com:example.ams3.digitaloceanspaces.com,public.example.com
+```
+
 Run:
 ```
 export $(cat .env) && docker run -d \
