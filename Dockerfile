@@ -19,11 +19,13 @@ RUN apt-get install -y uuid-runtime
 COPY crontab /tmp/crontab
 COPY entrypoint.sh /
 COPY renew.sh /
+COPY upload.sh /
 COPY letsencrypt-dns-authenticator.sh /
 COPY letsencrypt-dns-cleanup.sh /
 
 RUN chmod +x /entrypoint.sh \
     && chmod +x /renew.sh \
+    && chmod +x /upload.sh \
     && chmod +x /letsencrypt-dns-authenticator.sh \
     && chmod +x /letsencrypt-dns-cleanup.sh
 
