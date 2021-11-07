@@ -8,41 +8,12 @@ LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL
 UUID_REGEXP='[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}'
 CERTBOT_ARGS=$CERTBOT_ARGS
 
-# Usage: renew_cert example.ams3.digitaloceanspaces.com cdn.example.com
-renew_cert() {
+# Usage: upload_cert example.ams3.digitaloceanspaces.com cdn.example.com
+upload_cert() {
   local DIGITALOCEAN_CDN_ORIGIN=$1
   local CUSTOM_DOMAIN_NAME=$2
   local CERT_RENEWED=1 # Suppose that cert should be renewed.
-  local CERTBOT_STATUS_OUTPUT="/tmp/certbot/${CUSTOM_DOMAIN_NAME}.certbot-status.txt"
-  echo "Renewing certificate for custom domain: ${CUSTOM_DOMAIN_NAME}"
-
-  # Clean the certbot status output before run again.
-  rm -f $CERTBOT_STATUS_OUTPUT
-
-  certbot certonly \
-    --manual \
-    -n \
-    --agree-tos \
-    --preferred-challenges=dns \
-    --manual-auth-hook /letsencrypt-dns-authenticator.sh \
-    --manual-cleanup-hook /letsencrypt-dns-cleanup.sh \
-    --manual-public-ip-logging-ok \
-    -d $CUSTOM_DOMAIN_NAME \
-    -m $LETSENCRYPT_EMAIL \
-    ${CERTBOT_ARGS} 2>&1 | tee $CERTBOT_STATUS_OUTPUT
-
-  # Check if certbot response is not empty.
-  if [ ! -f $CERTBOT_STATUS_OUTPUT ] || [ ! -s $CERTBOT_STATUS_OUTPUT ]; then
-    CERT_RENEWED=0
-  fi
-
-  if grep -qi "An unexpected error occurred" $CERTBOT_STATUS_OUTPUT; then
-    CERT_RENEWED=0
-  fi
-
-  if grep -qi "Cert not yet due for renewal" $CERTBOT_STATUS_OUTPUT; then
-    CERT_RENEWED=0
-  fi
+  echo "Upload certificate for custom domain: ${CUSTOM_DOMAIN_NAME}"
 
   # If cert has been renewed, upload to DigitalOcean.
   if [ $CERT_RENEWED -ne 0 ]; then
@@ -134,7 +105,7 @@ if [ -n "${SPACES}" ]; then
     IFS=',' read CDN_ORIGIN CUSTOM_DOMAIN <<< "$SPACE"
     IFS="$_IFS" # Reset to default
     if [ -n "$CDN_ORIGIN" ] && [ -n "$CUSTOM_DOMAIN" ]; then
-      renew_cert $CDN_ORIGIN $CUSTOM_DOMAIN
+      upload_cert $CDN_ORIGIN $CUSTOM_DOMAIN
     fi
   done
   IFS="$_IFS"
