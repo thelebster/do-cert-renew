@@ -48,7 +48,7 @@ renew_cert() {
   if [ $CERT_RENEWED -ne 0 ]; then
     PRIVATE_KEY=$(jq -aRs . < /etc/letsencrypt/live/$CUSTOM_DOMAIN_NAME/privkey.pem)
     LEAF_CERT=$(jq -aRs . < /etc/letsencrypt/live/$CUSTOM_DOMAIN_NAME/cert.pem)
-    CERT_CHAIN=$(jq -aRs . < /etc/letsencrypt/live/$CUSTOM_DOMAIN_NAME/fullchain.pem)
+    CERT_CHAIN=$(sed ':a;N;$!ba;s/\n\n/\n/g' < /etc/letsencrypt/live/$CUSTOM_DOMAIN_NAME/fullchain.pem | jq -aRs .)
     CERT_NAME="$(uuidgen).$CUSTOM_DOMAIN_NAME"
     CERT_REQUEST_DATA_FILE_NAME=/tmp/certbot/$CUSTOM_DOMAIN_NAME.cert.json
 
